@@ -12,9 +12,6 @@ class algorithm:
         self.x = None
         self.y = None
         self.data = None
-        self.b_history = []  # Para almacenar los valores de b
-        self.w1_history = []  # Para almacenar los valores de w
-        self.w2_history = []
         self.cost_history = []  # Para almacenar los valores de J(w,b)
         self.it_history = []  # Para almacenar los valores de las iteraciones   
 
