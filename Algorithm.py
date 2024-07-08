@@ -47,7 +47,7 @@ class algorithm:
             self.it_history.append(it)
             dif = self.cost_history[it] - self.cost_history[it - 1]
             print(abs(dif))
-            if (abs(dif) < 0.000001) and it > 0:
+            if (abs(dif) < 0.0001) and it > 0:
                 break
             it += 1
             
@@ -55,7 +55,7 @@ class algorithm:
         return np.dot(self.w, self.x),self.cost_history, self.it_history
     
 def main():
-    algo = algorithm(0.000001, 5000)
+    algo = algorithm(0.00001, 500)
     algo.read_data('D:\\ML\\MyProgress\\Multiple Linear Regression\\archive\\data.csv')
     f , cost_hist, it_hist  = algo.model(algo.data)
 
