@@ -24,10 +24,19 @@ class algorithm:
         self.x[0, :] = data[:, 0]
         self.x[1, :] = data[:, 1]
 
+        self.x_mean = np.mean(self.x, axis=1)
+        self.x_range = np.ptp(self.x, axis=1)  # ptp = peak to peak (max - min)
+
+        # Normalizar
+        self.x[0,:] = (self.x[0,:] - self.x_mean[0]) / self.x_range[0]
+        self.x[1,:] = (self.x[1,:] - self.x_mean[1]) / self.x_range[1]
+
         self.y = data[:, 2]
         self.y = np.array(self.y)
 
-        self.y = self.y / np.max(self.y)
+        self.y_mean = np.mean(self.y)
+        self.y_range = np.ptp(self.y)
+        self.y = (self.y - self.y_mean) / self.y_range
 
         n, m = self.x.shape  # (number of features, number of examples)
         self.w = np.zeros((n,))
@@ -44,21 +53,24 @@ class algorithm:
             self.it_history.append(it)
             dif = self.cost_history[it] - self.cost_history[it - 1]
             print(abs(dif))
-            if (abs(dif) < 0.0001) and it > 0:
+            if (abs(dif) < 0.000001) and it > 0:
                 break
             it += 1
-            
         
-        return np.dot(self.w, self.x),self.cost_history, self.it_history
+
+        return np.dot(self.w, self.x), self.cost_history, self.it_history
     
-def main():
-    algo = algorithm(0.00001, 500)
-    algo.read_data('D:\\ML\\MyProgress\\Multiple Linear Regression\\archive\\data.csv')
-    f , cost_hist, it_hist  = algo.model(algo.data)
 
     
-    algo.y = algo.y * np.max(algo.data[:, 2])
-    f = f * np.max(algo.data[:, 2])
+def main():
+    algo = algorithm(0.1, 500)
+    algo.read_data('D:\\ML\\MyProgress\\Multiple Linear Regression\\archive\\data.csv')
+    f, cost_hist, it_hist= algo.model(algo.data)
+    
+    algo.x[0, :] = algo.x[0, :] * algo.x_range[0] + algo.x_mean[0]
+    algo.x[1, :] = algo.x[1, :] * algo.x_range[1] + algo.x_mean[1]
+    algo.y = algo.y * algo.y_range + algo.y_mean
+    f = f * algo.y_range + algo.y_mean
     # Plotting
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
