@@ -60,7 +60,8 @@ class algorithm:
 
         return np.dot(self.w, self.x), self.cost_history, self.it_history
     
-
+    def predict(self, x):
+        return (np.dot(self.w, x) + self.b) * (self.y_range + self.y_mean)
     
 def main():
     algo = algorithm(0.1, 500)
@@ -96,6 +97,7 @@ def main():
     plt.ylabel('Cost')
     plt.show()
 
+    print(algo.predict(np.array([25, 5])))
 
 if __name__ == '__main__':
     main()
